@@ -1,6 +1,6 @@
 FROM node:15
 
-WORKDIR /code
+WORKDIR /client
 
 RUN yarn install 
 RUN yarn dev 

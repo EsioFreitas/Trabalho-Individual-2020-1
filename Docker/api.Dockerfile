@@ -1,7 +1,7 @@
 
 FROM ruby:2.5.7
 
-WORKDIR /code
+WORKDIR /api
 
 RUN bundle install
 RUN rails db:migrate
