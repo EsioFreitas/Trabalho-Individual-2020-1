@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ./Docker/client.Dockerfile
     ports:
-      - 8080:8080
+      - 3000:3000
     volumes:
       - ./client:/code
       - node_modules:/code/node_modules
@@ -18,16 +18,14 @@ services:
       context: .
       dockerfile: ./Docker/api.Dockerfile
     ports:
-      - 3000:3000
+      - 8080:8080
     volumes:
       - ./api:/code
       - gems:/usr/local/bundle
-    command: ["sh", "/scripts/start.sh"]
-    env_file: ./db.env
     depends_on:
       - database
     networks:
-      - project_network
+      - connect
 
   database:
     container_name: database
@@ -36,10 +34,10 @@ services:
       - db:/var/lib/postgresql/data
     env_file: ./db.env
     networks:
-      - project_network
+      - connect
 
 networks:
-  project_network:
+  connect:
 
 volumes:
   node_modules:
