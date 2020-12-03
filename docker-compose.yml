@@ -3,43 +3,22 @@ version: "3.8"
 services:
   client:
     container_name: client
-    build:
-      context: .
-      dockerfile: ./Docker/client.Dockerfile
-    ports:
-      - 3000:3000
-    volumes:
-      - ./client:/code
-      - node_modules:/code/node_modules
-
-  api:
-    container_name: api
-    build:
-      context: .
-      dockerfile: ./Docker/api.Dockerfile
+    build: ./client
     ports:
       - 8080:8080
     volumes:
-      - ./api:/code
-      - gems:/usr/local/bundle
-    depends_on:
-      - database
-    networks:
-      - connect
+      - ./client:/app
 
-  database:
-    container_name: database
-    image: postgres:13
+  api:
+    container_name: api
+    build: ./api
+    ports:
+      - 3000:3000
     volumes:
-      - db:/var/lib/postgresql/data
-    env_file: ./db.env
-    networks:
-      - connect
+      - ./api:/api
+    depends_on:
+      - db
 
-networks:
-  connect:
-
-volumes:
-  node_modules:
   db:
-  gems:
+    image: postgres
+    env_file: ./db.env
