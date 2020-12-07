@@ -23,11 +23,10 @@ jobs:
         cd client/
         yarn
     - name: run client tests
-      run:  dockser-compose run client yarn run test:unit
+      run:  docker-compose run client yarn run test:unit
 
   api:
       runs-on: ubuntu-latest
-
       steps:
         - uses: actions/checkout@v2
 
