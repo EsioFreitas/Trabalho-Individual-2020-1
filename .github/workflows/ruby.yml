@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  frontend:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.15.1'
+
+    - name: build frontend container
+      run: docker-compose up --no-start client
+
+    - name: install dependencies
+      run: |
+        cd client/
+        yarn
+    - name: run frontend tests
+      run:  docker-compose run client yarn run test:unit
+
+ backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build backend containers
+        run:  docker-compose up --no-start api
+
+      - name: create database
+        run:  docker-compose run api rake db:create
+
+      - name: create migrations
+        run:  docker-compose run api rake db:migrate
+
+      - name: run backend tests
+        run : docker-compose run api bundle exec rails test
