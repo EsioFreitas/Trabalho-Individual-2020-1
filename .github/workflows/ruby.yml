@@ -24,10 +24,13 @@ jobs:
         yarn
     - name: run client tests
       run:  docker-compose run client yarn run test:unit
-    - name: Code Climate Coverage Action
-      uses: paambaati/codeclimate-action@v2.7.4
-      env:
-        CC_TEST_REPORTER_ID: 7a8845ad0dc6e0158ef08fc1e103d77e878fb513853746ad40b62a7e2bb8cc74
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: 7a8845ad0dc6e0158ef08fc1e103d77e878fb513853746ad40b62a7e2bb8cc74
+        with:
+          coverageCommand: npm run coverage
+          debug: true
 
 
   api:
