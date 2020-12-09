@@ -24,13 +24,13 @@ jobs:
         yarn
     - name: run client tests
       run:  docker-compose run client yarn run test:unit
-    - name: Test & publish code coverage
-      uses: paambaati/codeclimate-action@v2.7.4
-      env:
-        CC_TEST_REPORTER_ID: 7a8845ad0dc6e0158ef08fc1e103d77e878fb513853746ad40b62a7e2bb8cc74
-      with:
-        coverageCommand: npm run coverage
-        debug: true
+
+    - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+        with:
+          heroku_api_key: 5232b178-f8e3-416f-ad73-f8241e5ded22
+          heroku_app_name: gces-app #Must be unique in Heroku
+          heroku_email: esio.gustavo@gmail.com
+          usedocker: true
 
 
   api:
@@ -50,6 +50,10 @@ jobs:
         - name: run api tests
           run : docker-compose run api bundle exec rails test
 
-        - name: Code Climate Coverage Action
-          uses: paambaati/codeclimate-action@v2.7.4
+        - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+          with:
+            heroku_api_key: 5232b178-f8e3-416f-ad73-f8241e5ded22
+            heroku_app_name: gces-api #Must be unique in Heroku
+            heroku_email: esio.gustavo@gmail.com
+            usedocker: true
 
