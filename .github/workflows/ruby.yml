@@ -2,56 +2,52 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   client:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14.15.1'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.15.1"
+      - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+        with:
+          heroku_api_key: 5232b178-f8e3-416f-ad73-f8241e5ded22
+          heroku_app_name: gces-app #Must be unique in Heroku
+          heroku_email: esio.gustavo@gmail.com
 
-    - name: build client container
-      run: docker-compose up --no-start client
+      - name: build client container
+        run: docker-compose up --no-start client
 
-    - name: install dependencies
-      run: |
-        cd client/
-        yarn
-    - name: run client tests
-      run:  docker-compose run client yarn run test:unit
-
-    - name: deploy
-    - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
-      with:
-        heroku_api_key: 5232b178-f8e3-416f-ad73-f8241e5ded22
-        heroku_app_name: gces-app #Must be unique in Heroku
-        heroku_email: esio.gustavo@gmail.com
+      - name: install dependencies
+        run: |
+          cd client/
+          yarn
+      - name: run client tests
+        run: docker-compose run client yarn run test:unit
 
   api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: build api containers
-        run:  docker-compose up --no-start api
-
-      - name: create database
-        run:  docker-compose run api rake db:create
-
-      - name: create migrations
-        run:  docker-compose run api rake db:migrate
-
-      - name: run api tests
-        run : docker-compose run api bundle exec rails test
-
-      - name: deploy
       - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
         with:
           heroku_api_key: 5232b178-f8e3-416f-ad73-f8241e5ded22
           heroku_app_name: gces-api #Must be unique in Heroku
           heroku_email: esio.gustavo@gmail.com
+
+      - name: build api containers
+        run: docker-compose up --no-start api
+
+      - name: create database
+        run: docker-compose run api rake db:create
+
+      - name: create migrations
+        run: docker-compose run api rake db:migrate
+
+      - name: run api tests
+        run: docker-compose run api bundle exec rails test
