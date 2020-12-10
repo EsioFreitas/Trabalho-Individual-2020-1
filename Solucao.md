@@ -8,3 +8,7 @@ Foi ultilizado tanto Docker quanto Docker-compose para a containerização e orq
 make create
 make run
 ```
+
+# Integração Contínua
+
+2 jobs forma construídos para realizar a build dos containers.
