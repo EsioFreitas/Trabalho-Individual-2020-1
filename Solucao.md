@@ -11,4 +11,7 @@ make run
 
 # Integração Contínua
 
-2 jobs forma construídos para realizar a build dos containers.
+Foi ultilizado o Github Actions para criar 2 jobs que realizam:
+* Build
+* Install depedencies
+* Run tests
