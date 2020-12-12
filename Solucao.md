@@ -11,7 +11,10 @@ make run
 
 # Integração Contínua
 
-Foi ultilizado o Github Actions para criar 2 jobs que realizam:
+Foi ultilizado o Github Actions para buildar os projetos o SonarCloud para coletar métricas dos projedos.
+
+Os passos do CI são:
 * Build
 * Install depedencies
 * Run tests
+* Coleta de métricas
