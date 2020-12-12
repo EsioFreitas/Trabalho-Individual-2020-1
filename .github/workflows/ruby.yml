@@ -24,12 +24,20 @@ jobs:
           yarn
       - name: run client tests
         run: docker-compose run client yarn run test:unit
-        
-      - name: SonarCloud
+
+      - name: sonarCloud
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: deploy
+        uses: akhileshns/heroku-deploy@v3.7.8 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "gces-app" #Must be unique in Heroku
+          heroku_email: "esio.gustavo@gmail.com"
+          usedocker: true
 
   api:
     runs-on: ubuntu-latest
@@ -53,3 +61,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: deploy
+        uses: akhileshns/heroku-deploy@v3.7.8 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "gces-api" #Must be unique in Heroku
+          heroku_email: "esio.gustavo@gmail.com"
+          usedocker: true
