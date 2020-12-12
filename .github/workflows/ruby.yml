@@ -69,3 +69,16 @@ jobs:
           heroku_app_name: "gces-api" #Must be unique in Heroku
           heroku_email: "esio.gustavo@gmail.com"
           usedocker: true
+          
+      - name: login heroku
+        run: docker login --username _ --password=${{secrets.HEROKU_API_KEY}} registry.heroku.com
+      
+      - name: docker build
+        run: docker-compose build
+      
+      - name: push heroku
+        run: docker push registry.heroku.com/gces-app/web:latest
+      
+      - name: deploy
+        run: docker run --rm -e HEROKU_API_KEY=${{secrets.HEROKU_API_KEY}} wingrunr21/alpine-heroku-cli container:release web --app gces-app
+      
